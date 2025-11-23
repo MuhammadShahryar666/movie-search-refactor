@@ -2,32 +2,20 @@
 
 A production-ready RESTful API for searching movies using the OMDb API and managing favorites. Built with NestJS, TypeScript, and modern best practices.
 
-## 🚀 Features
+## Features
 
-- ✅ **API Versioning** - Semantic versioning with `/api/v1` prefix
-- ✅ **Swagger/OpenAPI Documentation** - Interactive API docs at `/api/docs`
-- ✅ **Rate Limiting** - Prevents API abuse with configurable throttling
-- ✅ **Input Validation** - Comprehensive validation using class-validator
-- ✅ **Health Checks** - Kubernetes-ready health endpoints
-- ✅ **Docker Support** - Production-ready Docker configuration
-- ✅ **Error Handling** - Consistent error responses
-- ✅ **Type Safety** - Full TypeScript implementation
-- ✅ **Logging** - Structured logging for monitoring
-- ✅ **CORS** - Configurable cross-origin resource sharing
+- **API Versioning** - Semantic versioning with `/api/v1` prefix
+- **Swagger/OpenAPI Documentation** - Interactive API docs at `/api/docs`
+- **Rate Limiting** - Prevents API abuse with configurable throttling
+- **Input Validation** - Comprehensive validation using class-validator
+- **Health Checks** - Kubernetes-ready health endpoints
+- **Docker Support** - Production-ready Docker configuration
+- **Error Handling** - Consistent error responses
+- **Type Safety** - Full TypeScript implementation
+- **Logging** - Structured logging for monitoring
+- **CORS** - Configurable cross-origin resource sharing
 
-## 📋 Table of Contents
-
-- [Quick Start](#quick-start)
-- [Environment Variables](#environment-variables)
-- [API Documentation](#api-documentation)
-- [Docker Deployment](#docker-deployment)
-- [Development](#development)
-- [API Endpoints](#api-endpoints)
-- [Rate Limiting](#rate-limiting)
-- [Health Checks](#health-checks)
-- [Architecture](#architecture)
-
-## 🏁 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -67,7 +55,7 @@ The API will be available at:
 - **Swagger Documentation**: `http://localhost:3001/api/docs`
 - **Health Check**: `http://localhost:3001/health`
 
-## 🔐 Environment Variables
+## Environment Variables
 
 Create a `.env` file in the backend directory with the following variables:
 
@@ -96,7 +84,7 @@ NODE_ENV=development
 | `CORS_ORIGIN` | No | http://localhost:3000 | Allowed CORS origins (comma-separated) |
 | `NODE_ENV` | No | development | Environment (development/production) |
 
-## 📚 API Documentation
+## API Documentation
 
 ### Interactive Documentation (Swagger)
 
@@ -114,7 +102,7 @@ All endpoints are versioned under `/api/v1`:
 Base URL: http://localhost:3001/api/v1
 ```
 
-## 🐳 Docker Deployment
+## Docker Deployment
 
 ### Using Docker Compose (Recommended)
 
@@ -154,13 +142,13 @@ docker rm movie-search-api
 
 ### Docker Features
 
-- ✅ **Multi-stage build** for optimized image size
-- ✅ **Non-root user** for enhanced security
-- ✅ **Health checks** for container monitoring
-- ✅ **Volume mounts** for data persistence
-- ✅ **Production-optimized** Node.js configuration
+- **Multi-stage build** for optimized image size
+- **Non-root user** for enhanced security
+- **Health checks** for container monitoring
+- **Volume mounts** for data persistence
+- **Production-optimized** Node.js configuration
 
-## 💻 Development
+## Development
 
 ### Project Structure
 
@@ -173,6 +161,7 @@ backend/
 │   │   ├── dto/               # Data Transfer Objects
 │   │   │   ├── movie.dto.ts
 │   │   │   ├── search-movies.dto.ts
+│   │   │   ├── search-query.dto.ts
 │   │   │   └── pagination.dto.ts
 │   │   ├── movies.controller.ts
 │   │   ├── movies.service.ts
@@ -210,7 +199,7 @@ npm run lint          # Run ESLint
 npm run format        # Format code with Prettier
 ```
 
-## 🔌 API Endpoints
+## API Endpoints
 
 ### Base URL: `/api/v1`
 
@@ -344,7 +333,7 @@ curl http://localhost:3001/api/v1/movies/favorites/list?page=1
 
 **Rate Limit:** 30 requests/30 seconds
 
-## ⚡ Rate Limiting
+## Rate Limiting
 
 The API implements rate limiting to prevent abuse:
 
@@ -373,7 +362,7 @@ When rate limit is exceeded, the API returns:
 - `X-RateLimit-Remaining` - Remaining requests
 - `X-RateLimit-Reset` - Time when limit resets
 
-## ❤️ Health Checks
+## Health Checks
 
 The API provides three health check endpoints for monitoring and orchestration:
 
@@ -441,7 +430,7 @@ readinessProbe:
   periodSeconds: 10
 ```
 
-## 🏗️ Architecture
+## Architecture
 
 ### Technology Stack
 
@@ -471,14 +460,50 @@ Favorites are stored in a JSON file (`data/favorites.json`) for simplicity. In p
 
 ### Security Features
 
-- ✅ Input validation on all endpoints
-- ✅ Rate limiting to prevent abuse
-- ✅ CORS configuration
-- ✅ No hardcoded secrets
-- ✅ Non-root Docker user
-- ✅ Whitelist-based DTO validation
+- Input validation on all endpoints
+- Rate limiting to prevent abuse
+- CORS configuration
+- No hardcoded secrets
+- Non-root Docker user
+- Whitelist-based DTO validation
 
-## 🚀 Production Deployment
+## Bug Fixes and Improvements
+
+### Major Bug Fixes (59 bugs fixed)
+
+#### movies.service.ts (42 bugs fixed)
+- **File Operations**: Added comprehensive error handling, directory creation, file validation
+- **Security**: Removed hardcoded API key fallback, added environment variable validation
+- **Type Safety**: Removed all `any` types, proper TypeScript interfaces
+- **Input Validation**: Validates all inputs before processing
+- **OMDb API Integration**: Proper URL encoding, error handling, timeout configuration
+- **Performance**: Set-based O(1) favorite lookups, optimized array operations
+- **Data Consistency**: Reload favorites from file before operations, verify file writes
+
+#### movies.controller.ts (11 bugs fixed)
+- **Input Validation**: Created DTOs with validation decorators
+- **Error Handling**: Added try-catch blocks, proper error logging
+- **Type Safety**: Proper type transformations with class-transformer
+
+#### dto/movie.dto.ts (4 bugs fixed)
+- **Validation**: Added class-validator decorators for all fields
+- **Type Safety**: Proper validation for year, URL, and imdbID format
+
+#### main.ts (3 bugs fixed)
+- **Configuration**: Environment-based CORS configuration
+- **Error Handling**: Bootstrap error handling
+- **Validation**: Global validation pipe configuration
+
+### Production Features Added
+
+- **API Versioning**: Semantic versioning with `/api/v1` prefix
+- **Swagger Documentation**: Interactive API documentation at `/api/docs`
+- **Rate Limiting**: Configurable throttling per endpoint
+- **Docker Support**: Multi-stage builds, health checks, security hardening
+- **Health Checks**: Kubernetes-ready endpoints for monitoring
+- **Enhanced Logging**: Structured logging for debugging and monitoring
+
+## Production Deployment
 
 ### Best Practices
 
@@ -547,23 +572,11 @@ spec:
           periodSeconds: 10
 ```
 
-## 📝 License
+## License
 
 This project is part of a technical assessment and is for educational purposes.
 
-## 🤝 Contributing
-
-This is a refactored version of the original codebase with:
-- 95+ bugs fixed
-- Production-ready features
-- Comprehensive documentation
-- Docker support
-- API versioning
-- Swagger documentation
-
-For the complete list of changes, see [REFACTORING.md](../REFACTORING.md) in the root directory.
-
-## 📞 Support
+## Support
 
 For issues or questions:
 1. Check the Swagger documentation at `/api/docs`

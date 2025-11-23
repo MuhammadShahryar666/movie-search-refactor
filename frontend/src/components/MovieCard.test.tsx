@@ -6,8 +6,10 @@ import { Movie } from '@/types/movie';
 jest.mock('next/image', () => ({
   __esModule: true,
   default: (props: any) => {
+    // Remove Next.js specific props that don't belong on img element
+    const { fill, sizes, ...imgProps } = props;
     // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
-    return <img {...props} />;
+    return <img {...imgProps} />;
   },
 }));
 
@@ -60,7 +62,7 @@ describe('MovieCard', () => {
         />
       );
 
-      const image = screen.getByAlt('The Matrix');
+      const image = screen.getByAltText('The Matrix');
       expect(image).toBeInTheDocument();
       expect(image).toHaveAttribute('src', mockMovie.poster);
     });
@@ -80,7 +82,7 @@ describe('MovieCard', () => {
       );
 
       expect(screen.getByText('No Image')).toBeInTheDocument();
-      expect(screen.queryByAlt('The Matrix')).not.toBeInTheDocument();
+      expect(screen.queryByAltText('The Matrix')).not.toBeInTheDocument();
     });
 
     it('should show fallback UI for "N/A" poster', () => {
@@ -221,7 +223,7 @@ describe('MovieCard', () => {
         />
       );
 
-      const image = screen.getByAlt('The Matrix');
+      const image = screen.getByAltText('The Matrix');
 
       // Simulate image error
       fireEvent.error(image);
@@ -280,7 +282,7 @@ describe('MovieCard', () => {
         />
       );
 
-      const image = screen.getByAlt('The Matrix');
+      const image = screen.getByAltText('The Matrix');
       expect(image).toBeInTheDocument();
     });
   });

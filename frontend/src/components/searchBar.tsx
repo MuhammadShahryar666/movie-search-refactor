@@ -24,6 +24,7 @@ interface SearchBarProps {
 const SearchBar = ({ onSearch, initialValue = "" }: SearchBarProps) => {
   const [query, setQuery] = useState(initialValue);
   const isFirstRender = useRef(true);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Sync local state with initialValue when it changes (e.g., navigating back with URL params)
   useEffect(() => {
@@ -45,17 +46,35 @@ const SearchBar = ({ onSearch, initialValue = "" }: SearchBarProps) => {
       return; // Block single character searches
     }
 
+    // Clear any existing timeout
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
     // Set up debounce timer
-    const timeoutId = setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       onSearch(trimmedQuery);
+      timeoutRef.current = null;
     }, 500); // 500ms debounce
 
     // Clean up timeout on unmount or when query changes
-    return () => clearTimeout(timeoutId);
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+    };
   }, [query, onSearch]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Cancel any pending debounce timer
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+    
     const trimmedQuery = query.trim();
 
     // Validate and submit - allow empty (clear) or 2+ characters
