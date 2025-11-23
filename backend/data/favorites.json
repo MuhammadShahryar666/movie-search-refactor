@@ -1,14 +1,1 @@
-[
-  {
-    "title": "Test Movie",
-    "imdbID": "tt1234567",
-    "year": 2023,
-    "poster": "http://example.com/poster.jpg"
-  },
-  {
-    "title": "Another Movie",
-    "imdbID": "tt7654321",
-    "year": 2022,
-    "poster": "N/A"
-  }
-]
+[]
